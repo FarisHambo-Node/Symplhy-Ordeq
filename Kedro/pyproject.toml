@@ -5,7 +5,7 @@ description = "Kedro Showcase – Classical ML & LLM pipelines (ported from Orde
 requires-python = ">=3.11"
 dependencies = [
     # ── Kedro core ──
-    "kedro>=0.19.0",
+    "kedro>=1.0.0",
     "kedro-datasets[pandas,matplotlib]>=2.0",
 
     # ── ML / AI ──
@@ -37,10 +37,13 @@ packages = ["src/kedro_showcase"]
 [tool.kedro]
 package_name = "kedro_showcase"
 project_name = "Kedro Showcase"
-kedro_init_version = "0.19.0"
+kedro_init_version = "1.2.0"
 tools = ""
 example_pipeline = "false"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-v"
+
+[tool.kedro_telemetry]
+project_id = "084c7a6f74c0423ba5deaaa639c209af"

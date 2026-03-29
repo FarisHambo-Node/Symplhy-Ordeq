@@ -23,7 +23,7 @@
 # (Ordeq used HuggingfaceDataset IO; Kedro uses a custom AbstractDataset)
 iris_hf:
   type: kedro_showcase.datasets.huggingface_dataset.HuggingFaceDataset
-  path: scikit-learn/iris
+  dataset_name: scikit-learn/iris
   metadata:
     description: "Iris flower dataset from HuggingFace Hub"
     layer: raw
@@ -101,14 +101,14 @@ ml_metrics:
     layer: reporting
 
 confusion_matrix_plot:
-  type: matplotlib.MatplotlibWriter
+  type: matplotlib.MatplotlibDataset
   filepath: data/08_reporting/confusion_matrix.png
   metadata:
     description: "Confusion matrix heatmap"
     layer: reporting
 
 feature_distribution_plot:
-  type: matplotlib.MatplotlibWriter
+  type: matplotlib.MatplotlibDataset
   filepath: data/08_reporting/feature_distributions.png
   metadata:
     description: "Feature distribution histograms"
@@ -128,7 +128,7 @@ feature_distribution_plot:
 
 emotion_hf:
   type: kedro_showcase.datasets.huggingface_dataset.HuggingFaceDataset
-  path: dair-ai/emotion
+  dataset_name: dair-ai/emotion
   metadata:
     description: "Emotion classification dataset (6 classes)"
     layer: raw
@@ -173,7 +173,7 @@ llm_results_csv:
     layer: reporting
 
 embedding_plot:
-  type: matplotlib.MatplotlibWriter
+  type: matplotlib.MatplotlibDataset
   filepath: data/08_reporting/embedding_tsne.png
   metadata:
     description: "t-SNE visualization of sentence embeddings"

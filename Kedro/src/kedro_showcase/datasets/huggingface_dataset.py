@@ -30,19 +30,18 @@ class HuggingFaceDataset(AbstractDataset):
     This is a read-only dataset (like Ordeq's Input class).
     """
 
-    def __init__(self, path: str, split: str | None = None, **kwargs):
+    def __init__(self, dataset_name: str, split: str | None = None, **kwargs):
         """
         Args:
-            path: HuggingFace dataset path (e.g. "scikit-learn/iris")
+            dataset_name: HuggingFace dataset identifier (e.g. "scikit-learn/iris")
             split: Optional split name (e.g. "train"). If None, returns DatasetDict.
         """
-        self._path = path
+        self._dataset_name = dataset_name
         self._split = split
-        self._kwargs = kwargs
 
     def _load(self) -> Any:
         from datasets import load_dataset
-        return load_dataset(self._path, split=self._split)
+        return load_dataset(self._dataset_name, split=self._split)
 
     def _save(self, data: Any) -> None:
         raise NotImplementedError(
@@ -52,6 +51,6 @@ class HuggingFaceDataset(AbstractDataset):
 
     def _describe(self) -> dict[str, Any]:
         return {
-            "path": self._path,
+            "dataset_name": self._dataset_name,
             "split": self._split,
         }
