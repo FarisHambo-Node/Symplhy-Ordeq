@@ -1,0 +1,82 @@
+graph TB
+	subgraph legend["Legend"]
+		direction TB
+		node_type@{shape: rounded, label: "Node"}
+		io_type_0@{shape: rect, label: "HuggingfaceDataset"}
+		io_type_1@{shape: rect, label: "IO"}
+		io_type_2@{shape: rect, label: "Joblib"}
+		io_type_3@{shape: rect, label: "MatplotlibFigure"}
+		io_type_4@{shape: rect, label: "NumpyBinary"}
+		io_type_5@{shape: rect, label: "PandasCSV"}
+		io_type_6@{shape: rect, label: "PandasParquet"}
+		io_type_7@{shape: rect, label: "YAML"}
+	end
+
+	ordeq_showcase.classical_ml.preprocessing:download_iris:hf_dataset --> ordeq_showcase.classical_ml.preprocessing:download_iris
+	ordeq_showcase.classical_ml.preprocessing:download_iris --> ordeq_showcase.classical_ml.preprocessing:clean_iris:df
+	ordeq_showcase.classical_ml.preprocessing:clean_iris:df --> ordeq_showcase.classical_ml.preprocessing:clean_iris
+	ordeq_showcase.classical_ml.preprocessing:clean_iris --> ordeq_showcase.classical_ml.preprocessing:engineer_features:df
+	ordeq_showcase.classical_ml.preprocessing:engineer_features:df --> ordeq_showcase.classical_ml.preprocessing:engineer_features
+	ordeq_showcase.classical_ml.preprocessing:engineer_features --> unknown_0
+	unknown_0 --> ordeq_showcase.classical_ml.preprocessing:split_data
+	ordeq_showcase.classical_ml.preprocessing:split_data --> ordeq_showcase.classical_ml.training:train_random_forest:X_train
+	ordeq_showcase.classical_ml.preprocessing:split_data --> ordeq_showcase.classical_ml.evaluation:predict:X_test
+	ordeq_showcase.classical_ml.preprocessing:split_data --> ordeq_showcase.classical_ml.training:train_random_forest:y_train
+	ordeq_showcase.classical_ml.preprocessing:split_data --> unknown_1
+	ordeq_showcase.classical_ml.training:train_random_forest:X_train --> ordeq_showcase.classical_ml.training:train_random_forest
+	ordeq_showcase.classical_ml.training:train_random_forest:y_train --> ordeq_showcase.classical_ml.training:train_random_forest
+	ordeq_showcase.classical_ml.training:train_random_forest --> ordeq_showcase.classical_ml.evaluation:predict:model
+	ordeq_showcase.classical_ml.evaluation:predict:model --> ordeq_showcase.classical_ml.evaluation:predict
+	ordeq_showcase.classical_ml.evaluation:predict:X_test --> ordeq_showcase.classical_ml.evaluation:predict
+	ordeq_showcase.classical_ml.evaluation:predict --> unknown_2
+	unknown_1 --> ordeq_showcase.classical_ml.evaluation:plot_confusion_matrix
+	unknown_2 --> ordeq_showcase.classical_ml.evaluation:plot_confusion_matrix
+	ordeq_showcase.classical_ml.evaluation:plot_confusion_matrix --> unknown_3
+	unknown_1 --> ordeq_showcase.classical_ml.evaluation:compute_metrics
+	unknown_2 --> ordeq_showcase.classical_ml.evaluation:compute_metrics
+	ordeq_showcase.classical_ml.evaluation:compute_metrics --> unknown_4
+	unknown_0 --> ordeq_showcase.classical_ml.evaluation:plot_feature_distributions
+	ordeq_showcase.classical_ml.evaluation:plot_feature_distributions --> unknown_5
+
+	ordeq_showcase.classical_ml.preprocessing:download_iris@{shape: rounded, label: "download_iris"}
+	ordeq_showcase.classical_ml.preprocessing:clean_iris@{shape: rounded, label: "clean_iris"}
+	ordeq_showcase.classical_ml.preprocessing:engineer_features@{shape: rounded, label: "engineer_features"}
+	ordeq_showcase.classical_ml.preprocessing:split_data@{shape: rounded, label: "split_data"}
+	ordeq_showcase.classical_ml.preprocessing:clean_iris:df@{shape: rect, label: "clean_iris:df"}
+	ordeq_showcase.classical_ml.preprocessing:engineer_features:df@{shape: rect, label: "engineer_features:df"}
+	ordeq_showcase.classical_ml.training:train_random_forest@{shape: rounded, label: "train_random_forest"}
+	ordeq_showcase.classical_ml.evaluation:predict@{shape: rounded, label: "predict"}
+	ordeq_showcase.classical_ml.evaluation:plot_confusion_matrix@{shape: rounded, label: "plot_confusion_matrix"}
+	ordeq_showcase.classical_ml.evaluation:compute_metrics@{shape: rounded, label: "compute_metrics"}
+	ordeq_showcase.classical_ml.evaluation:plot_feature_distributions@{shape: rounded, label: "plot_feature_distributions"}
+	unknown_2@{shape: rect, label: "compute_metrics:predictions"}
+	ordeq_showcase.classical_ml.evaluation:predict:X_test@{shape: rect, label: "predict:X_test"}
+	ordeq_showcase.classical_ml.evaluation:predict:model@{shape: rect, label: "predict:model"}
+	ordeq_showcase.classical_ml.preprocessing:download_iris:hf_dataset@{shape: rect, label: "download_iris:hf_dataset"}
+	ordeq_showcase.classical_ml.training:train_random_forest:X_train@{shape: rect, label: "train_random_forest:X_train"}
+	ordeq_showcase.classical_ml.training:train_random_forest:y_train@{shape: rect, label: "train_random_forest:y_train"}
+	unknown_0@{shape: rect, label: "plot_feature_distributions:df"}
+	unknown_1@{shape: rect, label: "compute_metrics:y_test"}
+	unknown_3@{shape: rect, label: "&lt;anonymous&gt;"}
+	unknown_4@{shape: rect, label: "&lt;anonymous&gt;"}
+	unknown_5@{shape: rect, label: "&lt;anonymous&gt;"}
+
+	class node_type,ordeq_showcase.classical_ml.preprocessing:download_iris,ordeq_showcase.classical_ml.preprocessing:clean_iris,ordeq_showcase.classical_ml.preprocessing:engineer_features,ordeq_showcase.classical_ml.preprocessing:split_data,ordeq_showcase.classical_ml.training:train_random_forest,ordeq_showcase.classical_ml.evaluation:predict,ordeq_showcase.classical_ml.evaluation:plot_confusion_matrix,ordeq_showcase.classical_ml.evaluation:compute_metrics,ordeq_showcase.classical_ml.evaluation:plot_feature_distributions node
+	class io_type_0,ordeq_showcase.classical_ml.preprocessing:download_iris:hf_dataset io0
+	class io_type_1,unknown_2 io1
+	class io_type_2,ordeq_showcase.classical_ml.evaluation:predict:model io2
+	class io_type_3,unknown_3,unknown_5 io3
+	class io_type_4,ordeq_showcase.classical_ml.evaluation:predict:X_test,ordeq_showcase.classical_ml.training:train_random_forest:X_train,ordeq_showcase.classical_ml.training:train_random_forest:y_train,unknown_1 io4
+	class io_type_5,ordeq_showcase.classical_ml.preprocessing:clean_iris:df,ordeq_showcase.classical_ml.preprocessing:engineer_features:df io5
+	class io_type_6,unknown_0 io6
+	class io_type_7,unknown_4 io7
+	classDef node fill:#008AD7,color:#FFF
+	classDef io fill:#FFD43B
+	classDef io0 fill:#66c2a5
+	classDef io1 fill:#fc8d62
+	classDef io2 fill:#8da0cb
+	classDef io3 fill:#e78ac3
+	classDef io4 fill:#a6d854
+	classDef io5 fill:#ffd92f
+	classDef io6 fill:#e5c494
+	classDef io7 fill:#b3b3b3

@@ -1,0 +1,40 @@
+[project]
+name = "ordeq-showcase"
+version = "0.1.0"
+description = "Ordeq Showcase – Classical ML & LLM pipelines demonstrating all Ordeq features"
+requires-python = ">=3.11"
+dependencies = [
+    # ── Ordeq core ──
+    "ordeq>=1.4.0",
+    "ordeq-pandas",
+    "ordeq-huggingface",
+    "ordeq-numpy",
+    "ordeq-joblib",
+    "ordeq-matplotlib",
+    "ordeq-viz",
+    "ordeq-yaml",
+    "ordeq-sentence-transformers",
+
+    # ── ML / AI ──
+    "scikit-learn>=1.4",
+    "transformers>=4.36",
+    "torch>=2.1",
+    "datasets>=2.16",
+    "sentence-transformers>=2.3",
+
+    # ── Data & Plotting ──
+    "pandas>=2.1",
+    "numpy>=1.26",
+    "matplotlib>=3.8",
+    "seaborn>=0.13",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.3"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ordeq_showcase"]
