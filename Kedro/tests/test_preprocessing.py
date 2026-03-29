@@ -1,17 +1,17 @@
 """
 test_preprocessing.py — Unit tests for classical ML preprocessing nodes.
 
-Ordeq features demonstrated:
-  • Testing nodes: Ordeq nodes are just functions! Call them directly.
-  • No need for a running pipeline — pass data in, assert on output.
-  • This is the recommended pattern from Ordeq docs.
+Ported from Ordeq's tests. Key difference:
+  • Ordeq nodes are plain functions → test by calling directly ✓
+  • Kedro nodes are ALSO plain functions → same testing pattern! ✓
+  • No need for Kedro runner or catalog in unit tests.
 """
 
 import numpy as np
 import pandas as pd
 import pytest
 
-from ordeq_showcase.classical_ml.preprocessing import (
+from kedro_showcase.pipelines.classical_ml.nodes import (
     clean_iris,
     engineer_features,
     split_data,
@@ -30,6 +30,20 @@ def sample_iris_df() -> pd.DataFrame:
     })
 
 
+@pytest.fixture
+def default_parameters() -> dict:
+    """Parameters matching parameters.yml classical_ml section."""
+    return {
+        "test_size": 0.2,
+        "random_state": 42,
+        "model": {
+            "n_estimators": 100,
+            "max_depth": 5,
+            "n_jobs": -1,
+        },
+    }
+
+
 class TestCleanIris:
     def test_columns_are_lowered(self, sample_iris_df):
         result = clean_iris(sample_iris_df)
@@ -41,7 +55,6 @@ class TestCleanIris:
         assert set(result["species"].unique()) == {"setosa", "versicolor", "virginica"}
 
     def test_no_nulls(self, sample_iris_df):
-        # Add a null row
         sample_iris_df.loc[10] = [None, None, None, None, None]
         result = clean_iris(sample_iris_df)
         assert result.isna().sum().sum() == 0
@@ -65,18 +78,18 @@ class TestEngineerFeatures:
 
 
 class TestSplitData:
-    def test_returns_four_arrays(self, sample_iris_df):
+    def test_returns_four_arrays(self, sample_iris_df, default_parameters):
         cleaned = clean_iris(sample_iris_df)
         featured = engineer_features(cleaned)
-        result = split_data(featured)
+        result = split_data(featured, default_parameters)
         assert len(result) == 4
         X_train, X_test, y_train, y_test = result
         assert isinstance(X_train, np.ndarray)
         assert isinstance(y_train, np.ndarray)
 
-    def test_split_proportions(self, sample_iris_df):
+    def test_split_proportions(self, sample_iris_df, default_parameters):
         cleaned = clean_iris(sample_iris_df)
         featured = engineer_features(cleaned)
-        X_train, X_test, y_train, y_test = split_data(featured)
+        X_train, X_test, y_train, y_test = split_data(featured, default_parameters)
         total = len(X_train) + len(X_test)
         assert total == len(sample_iris_df)

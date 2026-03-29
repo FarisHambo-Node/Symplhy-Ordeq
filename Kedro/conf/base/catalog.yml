@@ -1,0 +1,180 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# Kedro Data Catalog
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# Ported from Ordeq's catalog.py — all IO definitions live here.
+#
+# Key differences from Ordeq:
+#   • Ordeq: IO objects in Python (PandasCSV, NumpyBinary, etc.)
+#   • Kedro: YAML declarations referencing kedro-datasets classes
+#   • Ordeq's with_attributes() → Kedro metadata: {}
+#   • Ordeq's IO[list]() (in-memory) → Kedro MemoryDataset (implicit, no entry needed)
+#   • Ordeq's Resources (@) → not needed, Kedro resolves by dataset name
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ───────────────────────────────────────────────────────────────────────────────
+# PIPELINE 1: CLASSICAL ML (Iris dataset + RandomForest)
+# ───────────────────────────────────────────────────────────────────────────────
+
+# ── Raw data ──────────────────────────────────────────────────────────────────
+
+# HuggingFace dataset — loaded by a custom dataset class
+# (Ordeq used HuggingfaceDataset IO; Kedro uses a custom AbstractDataset)
+iris_hf:
+  type: kedro_showcase.datasets.huggingface_dataset.HuggingFaceDataset
+  path: scikit-learn/iris
+  metadata:
+    description: "Iris flower dataset from HuggingFace Hub"
+    layer: raw
+    source: huggingface
+
+iris_raw_csv:
+  type: pandas.CSVDataset
+  filepath: data/01_raw/iris.csv
+  metadata:
+    description: "Raw Iris dataset saved as CSV"
+    layer: raw
+
+# ── Processed data ────────────────────────────────────────────────────────────
+
+iris_clean:
+  type: pandas.CSVDataset
+  filepath: data/02_intermediate/iris_clean.csv
+  metadata:
+    description: "Cleaned Iris dataset (no nulls, correct types)"
+    layer: intermediate
+
+iris_features:
+  type: pandas.ParquetDataset
+  filepath: data/03_primary/iris_features.parquet
+  metadata:
+    description: "Engineered features for ML training"
+    layer: primary
+
+# ── Train / test splits (pickle for numpy arrays) ────────────────────────────
+
+X_train:
+  type: pickle.PickleDataset
+  filepath: data/03_primary/X_train.pkl
+  metadata:
+    description: "Training feature matrix"
+    layer: primary
+
+X_test:
+  type: pickle.PickleDataset
+  filepath: data/03_primary/X_test.pkl
+  metadata:
+    description: "Test feature matrix"
+    layer: primary
+
+y_train:
+  type: pickle.PickleDataset
+  filepath: data/03_primary/y_train.pkl
+  metadata:
+    description: "Training labels"
+    layer: primary
+
+y_test:
+  type: pickle.PickleDataset
+  filepath: data/03_primary/y_test.pkl
+  metadata:
+    description: "Test labels"
+    layer: primary
+
+# ── Model ─────────────────────────────────────────────────────────────────────
+
+classifier:
+  type: pickle.PickleDataset
+  filepath: data/06_models/random_forest.pkl
+  metadata:
+    description: "Trained RandomForest classifier"
+    layer: models
+
+# ── Outputs ───────────────────────────────────────────────────────────────────
+
+ml_metrics:
+  type: yaml.YAMLDataset
+  filepath: data/08_reporting/ml_metrics.yml
+  metadata:
+    description: "Classification metrics (accuracy, f1, etc.)"
+    layer: reporting
+
+confusion_matrix_plot:
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/confusion_matrix.png
+  metadata:
+    description: "Confusion matrix heatmap"
+    layer: reporting
+
+feature_distribution_plot:
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/feature_distributions.png
+  metadata:
+    description: "Feature distribution histograms"
+    layer: reporting
+
+# ── In-memory intermediates ───────────────────────────────────────────────────
+# In Ordeq: IO[list]() — in-memory, no file
+# In Kedro: simply don't declare them — they become MemoryDatasets automatically
+# ml_predictions is implicit (MemoryDataset)
+
+
+# ───────────────────────────────────────────────────────────────────────────────
+# PIPELINE 2: LLM TEXT CLASSIFICATION (Emotion dataset + DistilBERT)
+# ───────────────────────────────────────────────────────────────────────────────
+
+# ── Raw data ──────────────────────────────────────────────────────────────────
+
+emotion_hf:
+  type: kedro_showcase.datasets.huggingface_dataset.HuggingFaceDataset
+  path: dair-ai/emotion
+  metadata:
+    description: "Emotion classification dataset (6 classes)"
+    layer: raw
+    source: huggingface
+
+emotion_raw_csv:
+  type: pandas.CSVDataset
+  filepath: data/01_raw/emotion.csv
+  metadata:
+    description: "Emotion dataset saved as CSV"
+    layer: raw
+
+# ── Processed data ────────────────────────────────────────────────────────────
+
+emotion_clean:
+  type: pandas.CSVDataset
+  filepath: data/02_intermediate/emotion_clean.csv
+  metadata:
+    description: "Cleaned and subsampled emotion texts"
+    layer: intermediate
+
+# ── In-memory intermediates ───────────────────────────────────────────────────
+# llm_predictions, embeddings, emotion_classifier, embedding_model
+# are all implicit MemoryDatasets in Kedro
+
+# ── Outputs ───────────────────────────────────────────────────────────────────
+
+llm_metrics:
+  type: yaml.YAMLDataset
+  filepath: data/08_reporting/llm_metrics.yml
+  metadata:
+    description: "LLM classification accuracy & per-class metrics"
+    layer: reporting
+
+llm_results_csv:
+  type: pandas.CSVDataset
+  filepath: data/08_reporting/llm_results.csv
+  save_args:
+    index: false
+  metadata:
+    description: "Full predictions table: text, true label, predicted label"
+    layer: reporting
+
+embedding_plot:
+  type: matplotlib.MatplotlibWriter
+  filepath: data/08_reporting/embedding_tsne.png
+  metadata:
+    description: "t-SNE visualization of sentence embeddings"
+    layer: reporting

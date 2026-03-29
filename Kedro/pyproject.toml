@@ -1,19 +1,12 @@
 [project]
-name = "ordeq-showcase"
+name = "kedro-showcase"
 version = "0.1.0"
-description = "Ordeq Showcase – Classical ML & LLM pipelines demonstrating all Ordeq features"
+description = "Kedro Showcase – Classical ML & LLM pipelines (ported from Ordeq)"
 requires-python = ">=3.11"
 dependencies = [
-    # ── Ordeq core ──
-    "ordeq>=1.4.0",
-    "ordeq-pandas",
-    "ordeq-huggingface",
-    "ordeq-numpy",
-    "ordeq-joblib",
-    "ordeq-matplotlib",
-    "ordeq-viz",
-    "ordeq-yaml",
-    "ordeq-sentence-transformers",
+    # ── Kedro core ──
+    "kedro>=0.19.0",
+    "kedro-datasets[pandas,matplotlib]>=2.0",
 
     # ── ML / AI ──
     "scikit-learn>=1.4",
@@ -27,14 +20,27 @@ dependencies = [
     "numpy>=1.26",
     "matplotlib>=3.8",
     "seaborn>=0.13",
+    "pyyaml>=6.0",
+    "joblib>=1.3",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "ruff>=0.3"]
+dev = ["pytest>=8.0", "ruff>=0.3", "kedro-viz>=7.0"]
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/ordeq_showcase"]
+packages = ["src/kedro_showcase"]
+
+[tool.kedro]
+package_name = "kedro_showcase"
+project_name = "Kedro Showcase"
+kedro_init_version = "0.19.0"
+tools = ""
+example_pipeline = "false"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v"

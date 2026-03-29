@@ -1,0 +1,38 @@
+# Kedro logging configuration
+
+version: 1
+disable_existing_loggers: false
+
+formatters:
+  simple:
+    format: "%(asctime)s │ %(name)-20s │ %(message)s"
+    datefmt: "%H:%M:%S"
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: simple
+    stream: ext://sys.stdout
+
+  file:
+    class: logging.FileHandler
+    level: DEBUG
+    formatter: simple
+    filename: logs/kedro.log
+    mode: a
+
+loggers:
+  kedro:
+    level: INFO
+    handlers: [console]
+    propagate: false
+
+  kedro_showcase:
+    level: INFO
+    handlers: [console]
+    propagate: false
+
+root:
+  level: WARNING
+  handlers: [console]

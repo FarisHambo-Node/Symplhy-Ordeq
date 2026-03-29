@@ -5,12 +5,24 @@
 __pycache__/
 *.pyc
 *.pyo
+*.egg-info/
 
-# Generated outputs & data (reproducible via pipeline)
-Symplhy-Ordeq/models/
-Symplhy-Ordeq/outputs/
-Symplhy-Ordeq/data/raw/
-Symplhy-Ordeq/data/processed/
+# Kedro data layers (reproducible via pipeline)
+data/01_raw/*.csv
+data/02_intermediate/
+data/03_primary/
+data/06_models/
+data/08_reporting/
+!data/**/.gitkeep
+
+# Legacy paths
+models/
+outputs/
+data/raw/
+data/processed/
+
+# Logs
+logs/
 
 # OS junk
 .DS_Store

@@ -1,0 +1,42 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# Pipeline Parameters
+# ═══════════════════════════════════════════════════════════════════════════════
+#
+# In Ordeq, parameters were hardcoded in node functions.
+# In Kedro, we extract them here so they can be changed without editing code.
+# Access in nodes via params:key or parameters dict.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ── Classical ML Pipeline ─────────────────────────────────────────────────────
+
+classical_ml:
+  test_size: 0.2
+  random_state: 42
+  model:
+    n_estimators: 100
+    max_depth: 5
+    n_jobs: -1
+
+# ── LLM Pipeline ─────────────────────────────────────────────────────────────
+
+llm:
+  sample_per_class: 200
+  emotion_labels:
+    0: sadness
+    1: joy
+    2: love
+    3: anger
+    4: surprise
+    5: fear
+  classifier:
+    model_name: "bhadresh-savani/distilbert-base-uncased-emotion"
+    task: "text-classification"
+    top_k: 1
+    device: -1
+  embedding_model:
+    model: "all-MiniLM-L6-v2"
+  batch_size: 32
+  tsne:
+    n_components: 2
+    perplexity: 30
+    random_state: 42

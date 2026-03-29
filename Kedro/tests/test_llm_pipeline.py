@@ -1,14 +1,36 @@
 """
 test_llm_pipeline.py — Unit tests for LLM pipeline nodes.
 
-Shows: nodes are testable in isolation — pass mock data, assert results.
+Ported from Ordeq's tests. Same pattern: nodes are plain functions,
+call them directly with mock data.
 """
 
 import pandas as pd
 import pytest
 
-from ordeq_showcase.llm_pipeline.data_prep import clean_emotion, EMOTION_LABELS
-from ordeq_showcase.llm_pipeline.analysis import merge_results, compute_llm_metrics
+from kedro_showcase.pipelines.llm.nodes import (
+    clean_emotion,
+    merge_results,
+    compute_llm_metrics,
+)
+
+
+@pytest.fixture
+def default_llm_parameters() -> dict:
+    """Parameters matching parameters.yml llm section."""
+    return {
+        "sample_per_class": 200,
+        "emotion_labels": {0: "sadness", 1: "joy", 2: "love", 3: "anger", 4: "surprise", 5: "fear"},
+        "classifier": {
+            "model_name": "bhadresh-savani/distilbert-base-uncased-emotion",
+            "task": "text-classification",
+            "top_k": 1,
+            "device": -1,
+        },
+        "embedding_model": {"model": "all-MiniLM-L6-v2"},
+        "batch_size": 32,
+        "tsne": {"n_components": 2, "perplexity": 30, "random_state": 42},
+    }
 
 
 @pytest.fixture
@@ -28,21 +50,21 @@ def sample_emotion_df() -> pd.DataFrame:
 
 
 class TestCleanEmotion:
-    def test_removes_empty_texts(self):
+    def test_removes_empty_texts(self, default_llm_parameters):
         df = pd.DataFrame({
             "text": ["hello", "", "  ", "world"],
             "label": [1, 0, 2, 3],
             "label_name": ["joy", "sadness", "love", "anger"],
         })
-        result = clean_emotion(df)
+        result = clean_emotion(df, default_llm_parameters)
         assert len(result) <= 2  # only "hello" and "world" have content
 
-    def test_adds_text_clean_column(self, sample_emotion_df):
-        result = clean_emotion(sample_emotion_df)
+    def test_adds_text_clean_column(self, sample_emotion_df, default_llm_parameters):
+        result = clean_emotion(sample_emotion_df, default_llm_parameters)
         assert "text_clean" in result.columns
 
-    def test_text_is_lowered(self, sample_emotion_df):
-        result = clean_emotion(sample_emotion_df)
+    def test_text_is_lowered(self, sample_emotion_df, default_llm_parameters):
+        result = clean_emotion(sample_emotion_df, default_llm_parameters)
         for text in result["text_clean"]:
             assert text == text.lower()
 
