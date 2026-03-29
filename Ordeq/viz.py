@@ -46,6 +46,13 @@ def main():
     print("\n── LLM Pipeline (Mermaid) ──")
     print(viz(llm_pipeline, fmt="mermaid"))
 
+    # ── Clickable URLs for browser viewing ────────────────────────────────
+    print("\n🔗 Open these links in your browser to see the diagrams:\n")
+    ml_url = viz(classical_ml, fmt="mermaidchart-url")
+    print(f"  📊 Classical ML: {ml_url}")
+    llm_url = viz(llm_pipeline, fmt="mermaidchart-url")
+    print(f"  🤖 LLM Pipeline: {llm_url}")
+
 
 if __name__ == "__main__":
     main()
