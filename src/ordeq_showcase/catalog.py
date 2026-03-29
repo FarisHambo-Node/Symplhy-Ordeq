@@ -54,7 +54,7 @@ iris_raw_csv = PandasCSV(path=RAW / "iris.csv").with_attributes(
 iris_clean = PandasCSV(path=PROCESSED / "iris_clean.csv").with_attributes(
     description="Cleaned Iris dataset (no nulls, correct types)",
     layer="processed",
-) @ "iris-data"  # same resource as raw — demonstrates Resources
+)
 
 iris_features = PandasParquet(path=PROCESSED / "iris_features.parquet").with_attributes(
     description="Engineered features for ML training",

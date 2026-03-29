@@ -20,11 +20,11 @@ from ordeq_showcase.custom_io import TransformersClassifier
 # ── Catalog extensions: model IOs defined here for clarity ────────────────────
 # Custom IO: HuggingFace text-classification pipeline
 emotion_classifier = TransformersClassifier(
-    model_name="j-hartmann/emotion-english-distilbert-roberta-base",
+    model_name="bhadresh-savani/distilbert-base-uncased-emotion",
     task="text-classification",
     top_k=1,
 ).with_attributes(
-    description="DistilRoBERTa emotion classifier (7 classes)",
+    description="DistilBERT emotion classifier (6 classes)",
     layer="model",
 )
 

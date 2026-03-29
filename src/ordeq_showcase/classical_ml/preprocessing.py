@@ -8,6 +8,8 @@ Ordeq features demonstrated:
   • HuggingfaceDataset IO → PandasCSV IO chain
 """
 
+import re
+
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
@@ -16,6 +18,15 @@ from sklearn.preprocessing import StandardScaler
 from ordeq import node
 
 from ordeq_showcase import catalog
+
+
+def _normalize_col(name: str) -> str:
+    """Convert CamelCase / mixed column names to snake_case, stripping units."""
+    # Remove common suffixes like 'Cm'
+    name = re.sub(r'(?i)cm$', '', name)
+    # Insert underscore before uppercase letters
+    name = re.sub(r'(?<=[a-z0-9])(?=[A-Z])', '_', name)
+    return name.strip().lower().replace(" ", "_")
 
 
 # ─── Node 1: Download from HuggingFace and save as CSV ───────────────────────
@@ -27,6 +38,9 @@ from ordeq_showcase import catalog
 )
 def download_iris(hf_dataset) -> pd.DataFrame:
     """Download Iris dataset from HuggingFace and convert to DataFrame."""
+    # HuggingFace may return a DatasetDict — pick the 'train' split
+    if hasattr(hf_dataset, "keys"):
+        hf_dataset = hf_dataset["train"]
     df = hf_dataset.to_pandas()
     print(f"  📥 Downloaded Iris: {df.shape[0]} rows, {df.shape[1]} columns")
     return df
@@ -40,8 +54,11 @@ def download_iris(hf_dataset) -> pd.DataFrame:
 )
 def clean_iris(df: pd.DataFrame) -> pd.DataFrame:
     """Clean the Iris dataset: drop nulls, normalize column names."""
-    # Normalize column names
-    df.columns = [c.strip().lower().replace(" ", "_") for c in df.columns]
+    # Normalize column names (CamelCase → snake_case, strip 'Cm')
+    df.columns = [_normalize_col(c) for c in df.columns]
+
+    # Drop index-like columns
+    df = df.drop(columns=[c for c in df.columns if c in ("unnamed:_0", "id")], errors="ignore")
 
     # Drop any null rows
     before = len(df)
@@ -94,8 +111,8 @@ def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
 def split_data(df: pd.DataFrame) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """Split into train/test and scale features."""
     feature_cols = [c for c in df.columns if c != "species"]
-    X = df[feature_cols].values
-    y = df["species"].values
+    X = df[feature_cols].to_numpy(dtype=float)
+    y = df["species"].to_numpy()
 
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42, stratify=y

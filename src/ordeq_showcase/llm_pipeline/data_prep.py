@@ -54,11 +54,13 @@ def clean_emotion(df: pd.DataFrame) -> pd.DataFrame:
     df = df[df["text"].str.strip().str.len() > 0].copy()
 
     # Subsample: take 200 per class for a fast demo (1200 total)
-    df = (
-        df.groupby("label_name", group_keys=False)
-        .apply(lambda g: g.sample(n=min(200, len(g)), random_state=42))
-        .reset_index(drop=True)
-    )
+    EMOTION_LABELS_INV = {v: k for k, v in EMOTION_LABELS.items()}
+    df["label_name"] = df["label"].map(EMOTION_LABELS)
+    sampled_parts = []
+    for label_name in df["label_name"].unique():
+        group = df[df["label_name"] == label_name]
+        sampled_parts.append(group.sample(n=min(200, len(group)), random_state=42))
+    df = pd.concat(sampled_parts).reset_index(drop=True)
 
     # Basic text cleaning
     df["text_clean"] = (

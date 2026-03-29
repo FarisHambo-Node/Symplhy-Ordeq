@@ -63,7 +63,7 @@ def compute_llm_metrics(df: pd.DataFrame) -> dict:
             if cls not in ("accuracy", "macro avg", "weighted avg")
         },
         "macro_avg_f1": round(float(report["macro avg"]["f1-score"]), 4),
-        "model": "j-hartmann/emotion-english-distilbert-roberta-base",
+        "model": "bhadresh-savani/distilbert-base-uncased-emotion",
     }
 
     print(f"  📊 LLM Accuracy: {metrics['accuracy']:.2%}")
