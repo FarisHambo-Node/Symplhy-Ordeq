@@ -10,7 +10,6 @@ dependencies = [
     "ordeq-huggingface",
     "ordeq-numpy",
     "ordeq-joblib",
-    "ordeq-matplotlib",
     "ordeq-viz",
     "ordeq-yaml",
     "ordeq-sentence-transformers",

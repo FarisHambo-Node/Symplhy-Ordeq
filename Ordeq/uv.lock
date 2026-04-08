@@ -1469,16 +1469,6 @@ wheels = [
 ]
 
 [[package]]
-name = "ordeq-matplotlib"
-version = "1.0.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "matplotlib" },
-    { name = "ordeq" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/7e/66/dd417318000f98e0bfd7e5dd533061784b0e6be224200bef5db2bd8feabb/ordeq_matplotlib-1.0.0.tar.gz", hash = "sha256:24d9e7eb586bd47b99e69349fa9112ef9e37c45f0ea6d4be8b559faa522759d2", size = 2672, upload-time = "2025-09-24T21:02:30.702Z" }
-
-[[package]]
 name = "ordeq-numpy"
 version = "1.0.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1528,7 +1518,6 @@ dependencies = [
     { name = "ordeq" },
     { name = "ordeq-huggingface" },
     { name = "ordeq-joblib" },
-    { name = "ordeq-matplotlib" },
     { name = "ordeq-numpy" },
     { name = "ordeq-pandas" },
     { name = "ordeq-sentence-transformers" },
@@ -1556,7 +1545,6 @@ requires-dist = [
     { name = "ordeq", specifier = ">=1.4.0" },
     { name = "ordeq-huggingface" },
     { name = "ordeq-joblib" },
-    { name = "ordeq-matplotlib" },
     { name = "ordeq-numpy" },
     { name = "ordeq-pandas" },
     { name = "ordeq-sentence-transformers" },

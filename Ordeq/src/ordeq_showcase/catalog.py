@@ -17,7 +17,7 @@ from pathlib import Path
 from ordeq import IO, Input, Output
 from ordeq_huggingface import HuggingfaceDataset
 from ordeq_joblib import Joblib
-from ordeq_matplotlib import MatplotlibFigure
+from ordeq_showcase.matplotlib_figure import MatplotlibFigure
 from ordeq_numpy import NumpyBinary
 from ordeq_pandas import PandasCSV, PandasParquet
 from ordeq_yaml import YAML
